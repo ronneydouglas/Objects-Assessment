@@ -79,6 +79,7 @@ Date Object
   "use strict";
 
   var todayIs = new Date("June 12, 2017")
+
   console.assert(todayIs == today, "#3 Test failed. Did you set the date correctly?");
 })(testerOne);
 
@@ -118,10 +119,12 @@ Hoisting
 **************************************************************************************/
 (function(){
   "use strict";
-  var date = new Date("1983, 3, 21");
+  var birthday = new Date(1983, 3, 21);
+  var date = new Date(birthday);
   var bdayMsg = function(){
     return "You were born on " + date.toDateString();
   }
+  bdayMsg();
   console.log("#5 bdayMsg()", bdayMsg());
   console.assert(bdayMsg() == "You were born on Thu Apr 21 1983", "#5 Test failed. Check function hoisting." )
 })();
@@ -140,7 +143,8 @@ Date object
 (function(testerTwo){
   "use strict";
   var today = new Date();
-  var stringDate = date.getFullYear("17, 06, 12");
+  var stringDate = today.toDateString();
+
 
   console.log("#6 stringDate", stringDate)
   console.assert(stringDate == testerTwo, "#6 Test Failed. Did you set stringDate correctly?")
@@ -166,22 +170,26 @@ Hoisting
 (function(){
   "use strict";
 
-  pizza.pizzaMkr();
-
   var pizza = {
     sauce: "",
     orderNow: "",
     pizzaMkr: function(){
-      if (pizza.orderNow == true && pizza.sauce == true){
-        return "We are making your pizza with " + this.sauceType + " and " + this.protein + ". Pickup in 20 minutes."
-      }
-      else {
-        return "We only make traditional pizzas. You gotta add some sauce!"
-      }
+    if (pizza.orderNow == true && pizza.sauce == true){
+      return "We are making your pizza with " + this.sauceType + " and " + this.protein + ". Pickup in 20 minutes."
+    }
+    else {
+      return "We only make traditional pizzas. You gotta add some sauce!"
     }
   }
+}
 
-  console.log("# 7 pizza.pizzaMrk()", pizza.pizzaMkr());
+pizza.sauce = true;
+pizza.orderNow = true;
+pizza.protein = "chicken";
+pizza.sauceType = "tomato";
+pizza.pizzaMkr();
+
+  console.log("# 7 pizza.pizzaMkr()", pizza.pizzaMkr());
   console.assert(pizza.pizzaMkr() == "We are making your pizza with tomato and chicken. Pickup in 20 minutes.", "#7 Test failed. Did you add the propeties? Did you set the values correctly? Did you fix the hoisting issues?")
 })();
 
@@ -209,38 +217,29 @@ HINTS:
 (function() {
   "use strict";
 
-  var goodStanding = false;
-  var monthsActive = 2;
+   var goodStanding = false;
+   var monthsActive = 2;
+   var name = null;
+   var benefit = {credit: 50, discount: 5};
 
-  //Do not modify 'name' globaly.
-  var name = null;
+   var greeting = function() {
+       return "Hello " + "James" + ". Here is the status of your account."
+  };
 
-  accountCheck();
+   var accountCheck = function() {
+       var timeFrame = 12 - monthsActive;
+       var months = "";
 
-  var benefit = {}
-  //Add properties to 'benefit' using braket notation
-
-  var accountCheck = function() {
-
-    var greeting = function() {
-
-      return "Hello " + name + ". Here is the status of your account."
-    }
-
-    function accountStat() {
-
-      if (goodStanding == true && monthsActive >= 12) {
-
-        return offerDiscount(name);
+       function accountStat() {
+            if (goodStanding == true && monthsActive >= 12) {
+                return offerDiscount(name);
 
       } else if (goodStanding == false) {
 
-        return "Please make a payment within 7 days or your service will be terminated, forever."
+        return "Please make a payment within 7 days or your service will be terminated, forever.";
 
       } else if (monthsActive <= 12) {
 
-        var timeFrame = 12 - monthsActive;
-        var months;
 
         if (timeFrame == 1) {
 
@@ -259,6 +258,8 @@ HINTS:
       }
     }
     //Here 'accountCheck' should return both the 'greeting' output and the 'accountStat' output.
+    accountCheck()
+        return greeting + accountStat;
   }
 
   console.log("#8 accountCheck():", accountCheck());
@@ -266,6 +267,7 @@ HINTS:
   console.assert(accountCheck() == "Hello James. Here is the status of your account. Thank you for your loyalty. You've been a member for 18 months . You next bill will reflect a $50 credit and a 5% discount going forward.", "Test failed. It returned: " + accountCheck());
 
 })();
+
 
 
 
@@ -281,8 +283,8 @@ Compartmentalization
   var multiply = 2 * 8;
 
   function duplicate() {
-    multiply = 2 * 10;
-  };
+  let multiply = 2 * 10;
+  }
 
   duplicate();
 
